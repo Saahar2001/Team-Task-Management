@@ -1,0 +1,66 @@
+<div class="overlay" (click)="cancel.emit()">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="task-form-title" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <p>{{ task ? 'Edit task' : 'New task' }}</p>
+        <h2 id="task-form-title">{{ task ? 'Update task details' : 'Add a task to the board' }}</h2>
+      </div>
+      <button class="icon-button" type="button" aria-label="Close" (click)="cancel.emit()">×</button>
+    </div>
+
+    <form [formGroup]="taskForm" (ngSubmit)="submit()">
+      <label>
+        Task title
+        <input type="text" formControlName="title" placeholder="e.g. Prepare client proposal">
+        @if (taskForm.controls.title.touched && taskForm.controls.title.invalid) {
+          <small>Enter at least 3 characters.</small>
+        }
+      </label>
+
+      <label>
+        Description
+        <textarea rows="3" formControlName="description" placeholder="Write a short task description"></textarea>
+        @if (taskForm.controls.description.touched && taskForm.controls.description.invalid) {
+          <small>Description is required.</small>
+        }
+      </label>
+
+      <div class="two-columns">
+        <label>
+          Assignee
+          <input type="text" formControlName="assignee" placeholder="Team member name">
+        </label>
+
+        <label>
+          Due date
+          <input type="date" formControlName="dueDate">
+        </label>
+      </div>
+
+      <div class="two-columns">
+        <label>
+          Status
+          <select formControlName="status">
+            @for (status of statuses; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          Priority
+          <select formControlName="priority">
+            @for (priority of priorities; track priority) {
+              <option [value]="priority">{{ priority }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button class="secondary-button" type="button" (click)="cancel.emit()">Cancel</button>
+        <button class="primary-button" type="submit">{{ task ? 'Save changes' : 'Add task' }}</button>
+      </div>
+    </form>
+  </section>
+</div>

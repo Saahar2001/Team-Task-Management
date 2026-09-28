@@ -1,0 +1,96 @@
+<section class="page-heading">
+  <div>
+    <p class="section-label">Overview</p>
+    <h1>Dashboard</h1>
+    <p>Track team workload and see what needs attention.</p>
+  </div>
+  <a class="primary-button" routerLink="/tasks">View all tasks</a>
+</section>
+
+<section class="stats-grid" aria-label="Task summary">
+  <article class="stat-card">
+    <div class="stat-icon">◎</div>
+    <div>
+      <span>Total tasks</span>
+      <strong>{{ taskService.totalTasks() }}</strong>
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-icon">○</div>
+    <div>
+      <span>To do</span>
+      <strong>{{ taskService.todoTasks() }}</strong>
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-icon">↻</div>
+    <div>
+      <span>In progress</span>
+      <strong>{{ taskService.inProgressTasks() }}</strong>
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-icon">✓</div>
+    <div>
+      <span>Completed</span>
+      <strong>{{ taskService.completedTasks() }}</strong>
+    </div>
+  </article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel recent-panel">
+    <div class="panel-header">
+      <div>
+        <h2>Recent tasks</h2>
+        <p>Latest items added to the workspace</p>
+      </div>
+      <a routerLink="/tasks">Manage tasks →</a>
+    </div>
+
+    <div class="task-list">
+      @for (task of recentTasks(); track task.id) {
+        <div class="task-row">
+          <div class="task-main">
+            <span class="status-dot" [class.done]="task.status === 'Done'" [class.progress]="task.status === 'In Progress'"></span>
+            <div>
+              <strong>{{ task.title }}</strong>
+              <small>{{ task.assignee }}</small>
+            </div>
+          </div>
+          <div class="task-meta">
+            <span class="priority" [class.high]="task.priority === 'High'" [class.medium]="task.priority === 'Medium'">
+              {{ task.priority }}
+            </span>
+            <small>{{ task.dueDate | date:'MMM d' }}</small>
+          </div>
+        </div>
+      } @empty {
+        <p class="empty-state">No tasks yet.</p>
+      }
+    </div>
+  </article>
+
+  <article class="panel progress-panel">
+    <div>
+      <p class="section-label">Progress</p>
+      <h2>Completion rate</h2>
+      <p class="muted">Completed tasks compared with the total workload.</p>
+    </div>
+
+    <div class="progress-ring" [style.--progress]="completionRate() + '%'">
+      <div>
+        <strong>{{ completionRate() }}%</strong>
+        <span>complete</span>
+      </div>
+    </div>
+
+    <div class="progress-summary">
+      <span><b>{{ taskService.completedTasks() }}</b> done</span>
+      <span><b>{{ taskService.totalTasks() - taskService.completedTasks() }}</b> remaining</span>
+    </div>
+  </article>
+</section>

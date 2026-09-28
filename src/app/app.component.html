@@ -1,0 +1,43 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/" aria-label="WorkBoard home">
+      <span class="brand-mark">W</span>
+      <span>WorkBoard</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <span aria-hidden="true">▦</span>
+        Dashboard
+      </a>
+      <a routerLink="/tasks" routerLinkActive="active">
+        <span aria-hidden="true">✓</span>
+        Tasks
+      </a>
+    </nav>
+
+    <div class="sidebar-note">
+      <p>Simple team workspace</p>
+      <small>Angular 22 demo project</small>
+    </div>
+  </aside>
+
+  <div class="page-area">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Team workspace</p>
+        <strong>Good day 👋</strong>
+      </div>
+      <div class="profile-chip">
+        <span class="avatar">S</span>
+        <span>Sahar</span>
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer>WorkBoard · {{ currentYear }}</footer>
+  </div>
+</div>

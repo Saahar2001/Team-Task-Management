@@ -1,0 +1,89 @@
+<section class="page-heading">
+  <div>
+    <p class="section-label">Workspace</p>
+    <h1>Tasks</h1>
+    <p>Create, update and organize team tasks.</p>
+  </div>
+  <button class="primary-button" type="button" (click)="openAddForm()">+ Add task</button>
+</section>
+
+<section class="filters" aria-label="Task filters">
+  <label class="search-box">
+    <span aria-hidden="true">⌕</span>
+    <input
+      type="search"
+      placeholder="Search title, description or assignee"
+      [ngModel]="searchTerm()"
+      (ngModelChange)="searchTerm.set($event)">
+  </label>
+
+  <select aria-label="Filter by status" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+    <option value="All">All statuses</option>
+    <option value="To Do">To Do</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Done">Done</option>
+  </select>
+
+  <select aria-label="Filter by priority" [ngModel]="priorityFilter()" (ngModelChange)="priorityFilter.set($event)">
+    <option value="All">All priorities</option>
+    <option value="Low">Low</option>
+    <option value="Medium">Medium</option>
+    <option value="High">High</option>
+  </select>
+
+  <button class="text-button" type="button" (click)="clearFilters()">Clear</button>
+</section>
+
+<section class="task-grid">
+  @for (task of filteredTasks(); track task.id) {
+    <article class="task-card">
+      <div class="card-top">
+        <span class="status-badge" [class.done]="task.status === 'Done'" [class.progress]="task.status === 'In Progress'">
+          {{ task.status }}
+        </span>
+        <div class="card-actions">
+          <button type="button" (click)="openEditForm(task)">Edit</button>
+          <button class="delete" type="button" (click)="deleteTask(task)">Delete</button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <h2>{{ task.title }}</h2>
+        <p>{{ task.description }}</p>
+      </div>
+
+      <div class="task-details">
+        <div>
+          <span>Assignee</span>
+          <strong>{{ task.assignee }}</strong>
+        </div>
+        <div>
+          <span>Due date</span>
+          <strong>{{ task.dueDate | date:'MMM d, y' }}</strong>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <span class="priority" [class.high]="task.priority === 'High'" [class.medium]="task.priority === 'Medium'">
+          {{ task.priority }} priority
+        </span>
+        <small>Created {{ task.createdAt | date:'MMM d' }}</small>
+      </div>
+    </article>
+  } @empty {
+    <div class="empty-state">
+      <div>⌕</div>
+      <h2>No matching tasks</h2>
+      <p>Try changing your search or filters.</p>
+      <button type="button" (click)="clearFilters()">Reset filters</button>
+    </div>
+  }
+</section>
+
+@if (showForm()) {
+  <app-task-form
+    [task]="selectedTask()"
+    (saveTask)="saveTask($event)"
+    (cancel)="closeForm()">
+  </app-task-form>
+}
